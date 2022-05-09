@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const stuffRouter = require('./Router/stuff');
+const authRouter = require('./Router/user');
 const app = express();
 // Fix CORS issues
 app.use((req, res, next) => {
@@ -24,6 +25,7 @@ mongoose.connect('mongodb+srv://omarmbengue6919:Superomar221@cluster0.q3mf1.mong
 
     // routers
     app.use('/api/stuff',stuffRouter);
+    app.use('/api/auth',authRouter);
 
 
 

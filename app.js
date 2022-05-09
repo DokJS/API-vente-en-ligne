@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const stuffRouter = require('./Router/stuff');
 const app = express();
 // Fix CORS issues
 app.use((req, res, next) => {
@@ -9,6 +10,9 @@ app.use((req, res, next) => {
     next();
 });
 
+// Lets to retrieve incoming request's json content 
+app.use(express.json());
+
 // DB Connexion
 mongoose.connect('mongodb+srv://omarmbengue6919:Superomar221@cluster0.q3mf1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     {
@@ -17,6 +21,9 @@ mongoose.connect('mongodb+srv://omarmbengue6919:Superomar221@cluster0.q3mf1.mong
     })
     .then( ()=> console.log('Database connexion successfuly !'))
     .catch( ()=> console.log('Database connexion failed !'))
+
+    // routers
+    app.use('/api/stuff',stuffRouter);
 
 
 

@@ -1,5 +1,6 @@
 const User = require('../Models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 // Hash password supply by frontend
 // create a new instance of User
 // fill this instance by email and hashed password
@@ -34,7 +35,11 @@ exports.login = (req,res,next)=> {
             }
             return(res.status(200).json({
                 userId:foundUser._id,
-                token: 'TOKEN'
+                token: jwt.sign(
+                    {userId: foundUser._id},
+                    'RANDOM_TOKEN_SECRET',
+                    {expiresIn:'24h'}
+                )
             }))
         } )
         .catch( error => res.status(500).json({errorMessage: error}))

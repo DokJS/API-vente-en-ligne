@@ -1,4 +1,5 @@
 const Thing = require('../Models/stuff');
+const jwt = require('jsonwebtoken');
 exports.getAllThing = (req,res,next)=> {
     Thing.find()
     .then( allStuff => res.status(201).json({catalogue: allStuff}))
@@ -26,10 +27,26 @@ exports.modifyOneThing = (req,res,next)=> {
     .catch(erro => res.status(400).json({message: 'modification failed'}))
 }
 
+    
+ // find the thing that user wanna delete
+ // verify if user have authorization for delete them
+ // if true delete the thing
+ // else send errorMessage 
 exports.deleteOneThing = (req,res,next)=> {
-    Thing.deleteOne({_id:req.params.id})
-    .then( ()=> res.status(200).json({message: 'article deleted'}))
-    .catch( error => res.status(400).json({errorMessage: error}))
+    Thing.findOne({_id: req.params.id})
+    .then( thing => {
+         const requestHeadersData = req.headers.authorization.split(' ');
+         const token =  requestHeadersData[1];
+         const requestUserId = jwt.verify(token, 'RANDOM_TOKEN_SECRET').userId;
+         if(requestUserId === thing.userId){
+             Thing.deleteOne({_id:req.params.id})
+             .then(()=> res.status(200).json({message: 'article deleted !'}))
+             .catch(error => res.status(400).json({error}));
+         }else {
+             return res.status(400).json({message: ' unauthorized request '})
+         }
+    })
+    .catch()
 }
 
 exports.addOneThing = (req,res,next)=> {

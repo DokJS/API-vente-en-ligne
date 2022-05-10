@@ -23,7 +23,7 @@ bcrypt.hash(req.body.password,10)
 // if exists, compare incoming hash and saved hash
 // if doesn't exist, send an error message
 exports.login = (req,res,next)=> {
-    User.findOne({email:res.body.email})
+    User.findOne({email:req.body.email})
     .then( foundUser =>{
         if(!foundUser){
             return res.status(400).json({message: 'utilisateur non trouvé !'})
@@ -42,7 +42,7 @@ exports.login = (req,res,next)=> {
                 )
             }))
         } )
-        .catch( error => res.status(500).json({errorMessage: error}))
+        .catch( error => res.status(500).json({comparErrorMessage: error}))
     })
     .catch(error => res.status(500).json({errorMessage: error}) )
 

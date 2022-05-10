@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 // Hash password supply by frontend
 // create a new instance of User
-// fill this instance by email and hashed password
-// save this new instance into db
+// fill a instance of User with email and hashed password
+// save this instance into DB
 exports.signup = (req,res,next)=> {
 bcrypt.hash(req.body.password,10)
 .then( hashedPassword => {
@@ -19,8 +19,8 @@ bcrypt.hash(req.body.password,10)
 .catch( error => res.status(500).json({errorMessage: error}))
 
 };
-// research in DB user which have the incoming email address
-// if exists, compare incoming hash and saved hash
+// research in DB an email which matches to current email
+// if email exists, compare incoming password's hash and saved password's hash
 // if doesn't exist, send an error message
 exports.login = (req,res,next)=> {
     User.findOne({email:req.body.email})

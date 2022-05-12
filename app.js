@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const stuffRouter = require('./Router/stuff');
 const authRouter = require('./Router/user');
 const app = express();
+const path = require('path');
 // Fix CORS issues
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -23,7 +24,9 @@ mongoose.connect('mongodb+srv://omarmbengue6919:Superomar221@cluster0.q3mf1.mong
     .then( ()=> console.log('Database connexion successfuly !'))
     .catch( ()=> console.log('Database connexion failed !'))
 
-    // routers
+    // let to access images' contents by rendering images' folder static
+    app.use('/images', express.static(path.join(__dirname,'images')));
+    // router
     app.use('/api/stuff',stuffRouter);
     app.use('/api/auth',authRouter);
 
